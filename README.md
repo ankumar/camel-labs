@@ -3,7 +3,7 @@
 Implementation of the CaMeL (short for **CA**pabilities for **M**achin**E** **L**earning) system from the paper ["Defeating Prompt Injections by Design" by Debenedetti et al. (2025).](https://arxiv.org/pdf/2503.18813)
 
 - CaMeL is short for CApabilities for MachinE Learning.
-- Note that here the term capability refers to the standard security definition, and not the standard machine learning measurement of how capable models are.
+- Here the term **capability** refers to the standard security definition, and not the standard machine learning measurement of how capable models are.
 
 ## Overview
 
