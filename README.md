@@ -1,6 +1,6 @@
 # CaMeL: Defeating Prompt Injections by Design
 
-Implementation of the CaMeL (CApabilities for MachinE Learning) system from the paper "Defeating Prompt Injections by Design" by Debenedetti et al. (2025).
+Implementation of the CaMeL (short for **CA**pabilities for **M**achin**E** **L**earning) system from the paper ["Defeating Prompt Injections by Design" by Debenedetti et al. (2025).](https://arxiv.org/pdf/2503.18813)
 
 ## Overview
 
