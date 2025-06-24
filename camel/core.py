@@ -10,6 +10,7 @@ from .interpreter import CaMeLInterpreter
 from .capabilities import CapabilityTracker, CapabilitySet, Capability, CapabilityType
 from .capabilities import EmailSecurityPolicy, FileAccessPolicy
 from .tools import CaMeLToolRegistry
+from .mcp_security import MCPSecurityManager
 
 
 class CaMeLSystem:
@@ -46,6 +47,9 @@ class CaMeLSystem:
         # Initialize tools
         self.tool_registry = CaMeLToolRegistry()
         
+        # Initialize MCP security manager
+        self.mcp_security = MCPSecurityManager()
+        
         # Set up the system
         self._setup_system()
     
@@ -72,9 +76,15 @@ class CaMeLSystem:
     def _setup_security_policies(self):
         """Set up default security policies."""
         
-        # Email security policy
+        # Enhanced email security policy with recipient whitelisting
         trusted_domains = {"company.com", "trusted-partner.com"}
-        email_policy = EmailSecurityPolicy(trusted_domains)
+        approved_recipients = {
+            "bob@company.com", 
+            "alice@company.com", 
+            "charlie@company.com",
+            "support@company.com"
+        }
+        email_policy = EmailSecurityPolicy(trusted_domains, approved_recipients)
         self.capability_tracker.add_policy(email_policy)
         
         # File access policy

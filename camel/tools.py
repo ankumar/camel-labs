@@ -46,7 +46,20 @@ class EmailTool:
         return f"From: {last_email.sender}\nSubject: {last_email.subject}\nBody: {last_email.body}"
     
     def send_email(self, recipient: str, subject: str, body: str, attachment: Optional[str] = None) -> bool:
-        """Send an email."""
+        """Send an email with enhanced security checks."""
+        # Check recipient against security policies
+        from .capabilities import CapabilityTracker
+        
+        # Validate recipient format
+        if not self._is_valid_email(recipient):
+            print(f"🚫 BLOCKED: Invalid email format: {recipient}")
+            return False
+            
+        # Check for suspicious content patterns
+        if self._detect_exfiltration_attempt(subject, body):
+            print(f"🚫 BLOCKED: Potential data exfiltration detected in email")
+            return False
+        
         # In a real implementation, this would send the email
         email = Email(
             sender="user@company.com",
@@ -56,8 +69,24 @@ class EmailTool:
             timestamp="2025-01-01T12:00:00"
         )
         self.sent.append(email)
-        print(f"Email sent to {recipient}: {subject}")
+        print(f"📧 Email sent to {recipient}: {subject}")
         return True
+    
+    def _is_valid_email(self, email: str) -> bool:
+        """Validate email format."""
+        import re
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        return re.match(pattern, email) is not None
+    
+    def _detect_exfiltration_attempt(self, subject: str, body: str) -> bool:
+        """Detect potential data exfiltration patterns."""
+        suspicious_patterns = [
+            "api key", "password", "token", "secret", "credentials",
+            "confidential", "internal", "proprietary", "classified"
+        ]
+        
+        content = (subject + " " + body).lower()
+        return any(pattern in content for pattern in suspicious_patterns)
     
     def add_test_email(self, sender: str, subject: str, body: str) -> None:
         """Add a test email to the inbox."""
@@ -371,8 +400,25 @@ class CaMeLToolRegistry:
         }
     
     def _wrap_tool(self, func, capabilities: List[Capability] = None, requires_approval: bool = False):
-        """Wrap a tool function with capability tracking."""
+        """Wrap a tool function with capability tracking and policy enforcement."""
         def wrapper(*args, **kwargs):
+            # Enhanced security checks for send_email
+            if func.__name__ == "send_email":
+                recipient = args[0] if args else kwargs.get("recipient", "")
+                
+                # Check against capability tracker policies
+                from .capabilities import CapabilityTracker
+                tracker = CapabilityTracker()
+                
+                # Pass recipient value for policy checking
+                policy_kwargs = {
+                    "recipient_value": recipient,
+                    "recipient": "recipient_var"  # Variable name for capability tracking
+                }
+                
+                if not tracker.check_operation("send_email", **policy_kwargs):
+                    return "🚫 Email blocked by security policy"
+            
             if requires_approval:
                 action = f"{func.__name__}({', '.join(map(str, args))})"
                 approved = self.user_tool.require_user_approval(

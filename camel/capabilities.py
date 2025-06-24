@@ -146,21 +146,47 @@ class SecurityPolicy:
 
 
 class EmailSecurityPolicy(SecurityPolicy):
-    """Security policy for email operations."""
+    """Enhanced security policy for email operations with recipient whitelisting."""
     
-    def __init__(self, trusted_domains: Set[str]):
+    def __init__(self, trusted_domains: Set[str], approved_recipients: Set[str] = None):
         self.trusted_domains = trusted_domains
+        self.approved_recipients = approved_recipients or set()
+        self.blocked_domains = {"evil.com", "malicious.com", "attacker.com", "hacker.com"}
     
     def check(self, operation: str, tracker: CapabilityTracker, **kwargs) -> bool:
         if operation == "send_email":
-            recipient = kwargs.get("recipient")
-            if recipient:
-                recipient_caps = tracker.get_capabilities(recipient)
+            recipient = kwargs.get("recipient_value", "")
+            
+            # Always block known malicious domains
+            if any(bad_domain in recipient.lower() for bad_domain in self.blocked_domains):
+                print(f"🚫 BLOCKED: Email to {recipient} - Known malicious domain")
+                return False
+            
+            # Check if recipient is explicitly approved
+            if recipient in self.approved_recipients:
+                return True
+                
+            # Check if recipient uses untrusted data
+            recipient_var = kwargs.get("recipient")
+            if recipient_var:
+                recipient_caps = tracker.get_capabilities(recipient_var)
                 if recipient_caps and recipient_caps.is_untrusted():
-                    # Check if recipient is from a trusted domain
-                    recipient_value = kwargs.get("recipient_value", "")
-                    return any(domain in recipient_value for domain in self.trusted_domains)
+                    # Only allow if recipient is from trusted domain
+                    if any(domain in recipient for domain in self.trusted_domains):
+                        print(f"🔒 ALLOWED: Untrusted recipient {recipient} from trusted domain")
+                        return True
+                    else:
+                        print(f"🚫 BLOCKED: Untrusted recipient {recipient} not from trusted domain")
+                        return False
         return True
+    
+    def add_approved_recipient(self, email: str) -> None:
+        """Add an email address to the approved recipients list."""
+        self.approved_recipients.add(email)
+    
+    def remove_approved_recipient(self, email: str) -> None:
+        """Remove an email address from the approved recipients list."""
+        self.approved_recipients.discard(email)
 
 
 class FileAccessPolicy(SecurityPolicy):
