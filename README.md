@@ -5,6 +5,15 @@ Implementation of the CaMeL (short for **CA**pabilities for **M**achin**E** **L*
 - CaMeL is short for CApabilities for MachinE Learning.
 - Here the term **capability** refers to the standard security definition, and not the standard machine learning measurement of how capable models are.
 
+**8. Discussion**
+While CaMeL offers robustness to prompt injection attacks, it has several potential limitations that
+would be shared with any other capability-based protection scheme. In this section we first discuss
+how, just like our defense comes from ideas from the security literature, we can evade the defense
+by leveraging attacks from the security literature. Second, we discuss the challenges of balancing
+security with user experience, particularly in the context of de-classification and user fatigue. Third,
+we discuss how side-channels can be difficult to overcome for CaMeL and other systems built on
+similar principles.
+
 ## Overview
 
 CaMeL is a robust defense against prompt injection attacks that creates a protective system layer around Large Language Models (LLMs). It works by:
