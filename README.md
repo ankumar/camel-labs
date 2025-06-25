@@ -24,7 +24,7 @@ work against CaMeL – an attacker might be able to create a malicious control f
 it with the smaller control flow blocks that are allowed by the security policy similar to what we
 demonstrate in Section 5.4.
 
-**And is AgentDojo fully solved now? Not exactly.** While CaMeL offers robust security guarantees
+**And is [AgentDojo](https://agentdojo.spylab.ai/) fully solved now? Not exactly.** While CaMeL offers robust security guarantees
 and demonstrates resilience against existing prompt injection attacks within AgentDojo benchmark, it
 would be inaccurate to claim a complete resolution. Rather, our approach diverges from prior efforts,
 focusing on building model scaffolding rather than improving the model. Furthermore, existing
