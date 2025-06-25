@@ -15,15 +15,6 @@ fatigue, is challenging. We also explicitly acknowledge the potential for side-c
 CaMeL; however, we do note that their successful exploitation is significantly hindered by bandwidth
 limitations and the involved attack complexity.
 
-Similarly, in traditional software security, Control Flow Integrity (CFI) (Abadi et al., 2009) was
-developed to prevent control flow hijacking but remained vulnerable to return-oriented programming
-(ROP) attacks (Shacham, 2007; Carlini and Wagner, 2014). ROP is an exploitation technique where
-attackers chain together existing code fragments (called "gadgets") to execute malicious operations
-while following individually valid control flows. We suspect attacks that are similar in spirit could
-work against CaMeL – an attacker might be able to create a malicious control flow by approximating
-it with the smaller control flow blocks that are allowed by the security policy similar to what we
-demonstrate in Section 5.4.
-
 **And is [AgentDojo](https://agentdojo.spylab.ai/) fully solved now? Not exactly.** While CaMeL offers robust security guarantees
 and demonstrates resilience against existing prompt injection attacks within AgentDojo benchmark, it
 would be inaccurate to claim a complete resolution. Rather, our approach diverges from prior efforts,
