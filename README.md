@@ -5,7 +5,7 @@ Implementation of the CaMeL (short for **CA**pabilities for **M**achin**E** **L*
 - CaMeL is short for CApabilities for MachinE Learning.
 - Here the term **capability** refers to the standard security definition, and not the standard machine learning measurement of how capable models are.
 
-8.3. So, are prompt injections solved now?
+**So, are prompt injections solved now?**
 **No, prompt injection attacks are not fully solved.** While CaMeL significantly improves the security
 of LLM agents against prompt injection attacks and allows for fine-grained policy enforcement, it
 is not without limitations. Importantly, CaMeL suffers from users needing to codify and specify
